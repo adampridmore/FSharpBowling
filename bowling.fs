@@ -7,11 +7,11 @@ let score bowls =
     let rec scoreFrames bowls frameIndex =
         let nextFrameIndex = frameIndex + 1 
         match frameIndex, bowls with
-        | _ , [] -> 0
-        | frameIndex, _ when frameIndex > 9 -> 0 // Ignore any bonus balls
-        | _ , a::b::c::rest when a = 10 -> a + b + c + scoreFrames (b::c::rest) nextFrameIndex // Strike
-        | _ , a::b::c::rest when a + b = 10 -> a + b + c + scoreFrames (c::rest) nextFrameIndex // Spare
-        | _ , a::b::rest -> a + b + (scoreFrames rest) nextFrameIndex
+        | _ , [] -> 0 // No more bowls
+        | frameIndex, _ when frameIndex > 9 -> 0 // No more frames - game Over (and ignore any bonus balls)
+        | _ , a::(b::c::_ as rest) when a = 10 -> a + b + c + scoreFrames rest nextFrameIndex // Strike
+        | _ , a::b::(c::_ as rest) when a + b = 10 -> a + b + c + scoreFrames rest nextFrameIndex // Spare
+        | _ , a::b::rest -> a + b + scoreFrames rest nextFrameIndex
         | _ -> failwith (sprintf "Invalid bowls: %A" bowls)
 
     scoreFrames bowls 0
