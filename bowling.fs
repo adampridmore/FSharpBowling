@@ -5,13 +5,12 @@ open Xunit
 
 let score bowls = 
     let rec scoreFrames bowls frameIndex =
-        let nextFrameIndex = frameIndex + 1 
         match frameIndex, bowls with
         | _ , [] -> 0 // No more bowls
         | frameIndex, _ when frameIndex > 9 -> 0 // No more frames - game Over (and ignore any bonus balls)
-        | _ , a::(b::c::_ as rest) when a = 10 -> a + b + c + scoreFrames rest nextFrameIndex // Strike
-        | _ , a::b::(c::_ as rest) when a + b = 10 -> a + b + c + scoreFrames rest nextFrameIndex // Spare
-        | _ , a::b::rest -> a + b + scoreFrames rest nextFrameIndex
+        | _ , a::(b::c::_ as rest) when a = 10 -> a + b + c + scoreFrames rest (frameIndex + 1) // Strike
+        | _ , a::b::(c::_ as rest) when a + b = 10 -> a + b + c + scoreFrames rest (frameIndex + 1) // Spare
+        | _ , a::b::rest -> a + b + scoreFrames rest (frameIndex + 1)
         | _ -> failwith (sprintf "Invalid bowls: %A" bowls)
 
     scoreFrames bowls 0
