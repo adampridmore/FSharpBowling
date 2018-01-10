@@ -1,15 +1,16 @@
 module Bowling
 
-open System
 open Xunit
 
 let score bowls = 
     let rec scoreFrames bowls frameIndex =
+        let isStrike a = a = 10
+        let isSpare (a,b) = a + b = 10
         match frameIndex, bowls with
-        | _ , [] -> 0 // No more bowls
-        | frameIndex, _ when frameIndex > 9 -> 0 // No more frames - game Over (and ignore any bonus balls)
-        | _ , a::(b::c::_ as rest) when a = 10 -> a + b + c + scoreFrames rest (frameIndex + 1) // Strike
-        | _ , a::b::(c::_ as rest) when a + b = 10 -> a + b + c + scoreFrames rest (frameIndex + 1) // Spare
+        | _ , [] -> 0
+        | frameIndex, _ when frameIndex > 9 -> 0
+        | _ , a::(b::c::_ as rest) when a |> isStrike -> 10 + b + c + scoreFrames rest (frameIndex + 1)
+        | _ , a::b::(c::_ as rest) when (a,b) |> isSpare -> 10 + c + scoreFrames rest (frameIndex + 1)
         | _ , a::b::rest -> a + b + scoreFrames rest (frameIndex + 1)
         | _ -> failwith (sprintf "Invalid bowls: %A" bowls)
 
