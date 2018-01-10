@@ -3,7 +3,6 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Tests.fs" />
     <Compile Include="bowling.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
